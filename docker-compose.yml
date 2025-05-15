@@ -1,0 +1,47 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: app
+        ports:
+            - "9000:9000"
+        volumes:
+            - .:/var/www
+        depends_on:
+            - postgres
+        networks:
+            - weather-subscription-api
+    nginx:
+        image: nginx:latest
+        container_name: nginx
+        ports:
+            - "80:80"
+        volumes:
+            - .:/var/www
+            - ./_docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - app
+        networks:
+            - weather-subscription-api
+    postgres:
+        image: postgres:latest
+        container_name: postgres
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_DB: ${DB_DATABASE}
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        networks:
+            - weather-subscription-api
+
+volumes:
+    postgres_data:
+        driver: local
+
+networks:
+    weather-subscription-api:
+        driver: bridge
