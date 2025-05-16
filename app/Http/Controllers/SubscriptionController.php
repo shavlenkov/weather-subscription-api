@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Requests\ConfirmSubscriptionRequest;
 use App\Http\Requests\SubscribeRequest;
 use App\Services\SubscriptionService;
+use App\Events\SubscriptionCreated;
 
 /**
  * SubscriptionController class
@@ -40,11 +41,13 @@ class SubscriptionController extends Controller
             return response()->json(['error' => $result['message']], 409);
         }
 
+        event(new SubscriptionCreated($result['data']));
+
         return response()->json(['message' => 'Subscription successful. Confirmation email sent']);
     }
 
     /**
-     * Confirms a subscription using a token.
+     * Confirms a subscription using a token
      *
      * @param ConfirmSubscriptionRequest $request Validated request containing a token
      * @return JsonResponse JSON response indicating success or failure
