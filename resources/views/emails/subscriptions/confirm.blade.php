@@ -48,7 +48,7 @@
         <p>Thank you for subscribing to our newsletter. We're excited to have you on board.</p>
         <p>To start receiving updates from us, please confirm your subscription by clicking the button below:</p>
         <p>
-            <a href="http://localhost/api/confirm/{{ $subscription->token }}" class="button">
+            <a href="{{ route('confirm', ['token' => $subscription->token]) }}" class="button">
                 Confirm Subscription
             </a>
         </p>

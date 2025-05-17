@@ -53,6 +53,6 @@
         <span><span class="label">Humidity:</span> {{ $data['humidity'] }}</span>
         <span><span class="label">Description:</span> {{ $data['description'] }}</span>
     </div>
-    <a href="http://localhost/api/unsubscribe/{{ $token }}" class="unsubscribe-btn">Unsubscribe</a>
+    <a href="{{ route('unsubscribe', ['token' => $token]) }}" class="unsubscribe-btn">Unsubscribe</a>
 </div>
 </body>
