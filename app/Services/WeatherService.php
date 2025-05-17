@@ -28,7 +28,13 @@ class WeatherService implements WeatherServiceContract
         ]);
 
         if ($response->successful()) {
-            return $response->json();
+            $json = $response->json();
+
+            return [
+                'temperature' => $json['current']['temp_c'],
+                'humidity' => $json['current']['humidity'],
+                'description' => $json['current']['condition']['text'],
+            ];
         }
 
         return null;
