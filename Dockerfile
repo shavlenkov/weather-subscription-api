@@ -5,6 +5,9 @@ RUN apt-get update && \
     git \
     libpq-dev \
     unzip \
+    cron \
+    systemctl \
+    nano \
     && docker-php-ext-install pdo pdo_pgsql pgsql
 
 COPY ./_docker/php/php.ini /usr/local/etc/php/php.ini
@@ -12,8 +15,6 @@ COPY ./_docker/php/php.ini /usr/local/etc/php/php.ini
 WORKDIR /var/www
 
 COPY . .
-
-RUN chmod -R 775 .
 
 EXPOSE 9000
 
