@@ -23,6 +23,7 @@ class SendWeatherReportsCommand extends Command
             ->get()
             ->each(function ($subscription) {
                 SendWeatherReportMailJob::dispatch($subscription);
+
                 $subscription->update(['last_report_date' => now()]);
             });
 
@@ -33,6 +34,7 @@ class SendWeatherReportsCommand extends Command
             ->get()
             ->each(function ($subscription) {
                 SendWeatherReportMailJob::dispatch($subscription);
+
                 $subscription->update(['last_report_date' => now()]);
             });
     }

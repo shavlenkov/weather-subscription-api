@@ -22,7 +22,9 @@ class GetWeatherRequest extends FormRequest
 
     public function validationData(): array
     {
-        return ['city' => $this->query('city')];
+        return [
+            'city' => $this->query('city'),
+        ];
     }
 
     protected function failedValidation(Validator $validator)

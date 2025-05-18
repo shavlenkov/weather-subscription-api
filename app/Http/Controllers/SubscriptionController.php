@@ -17,7 +17,7 @@ use App\Events\SubscriptionCreated;
 class SubscriptionController extends Controller
 {
     /**
-     * SubscriptionController constructor
+     * Constructor of SubscriptionController class
      *
      * @param SubscriptionService $subscriptionService
      */

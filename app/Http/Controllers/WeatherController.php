@@ -16,7 +16,7 @@ use App\Http\Requests\GetWeatherRequest;
 class WeatherController extends Controller
 {
     /**
-     * WeatherController constructor
+     * Constructor of WeatherController class
      *
      * @param WeatherService $weatherService Service for fetching weather data
      */

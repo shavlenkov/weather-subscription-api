@@ -15,7 +15,7 @@ class TokenService implements TokenServiceContract
     /**
      * Generates a random 32-character token
      *
-     * @return string The generated token.
+     * @return string The generated token
      */
     public function generateToken(): string
     {

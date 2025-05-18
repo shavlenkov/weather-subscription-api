@@ -23,7 +23,9 @@ class UnsubscribeRequest extends FormRequest
 
     public function validationData(): array
     {
-        return ['token' => $this->route('token')];
+        return [
+            'token' => $this->route('token'),
+        ];
     }
 
     protected function failedValidation(Validator $validator)
