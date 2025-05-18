@@ -33,7 +33,7 @@ class WeatherReportMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.weather.report',
+            view: 'mails.weather.report',
             with: [
                 'token' => $this->subscription->token,
                 'city' => $this->subscription->city,

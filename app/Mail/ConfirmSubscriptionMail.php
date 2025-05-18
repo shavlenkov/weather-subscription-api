@@ -37,7 +37,7 @@ class ConfirmSubscriptionMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.subscriptions.confirm',
+            view: 'mails.subscriptions.confirm',
             with: [
                 'subscription' => $this->subscription,
             ],
