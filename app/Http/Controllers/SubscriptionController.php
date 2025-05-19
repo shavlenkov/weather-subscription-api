@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 
 use App\Http\Requests\ConfirmSubscriptionRequest;
 use App\Http\Requests\SubscribeRequest;
+use App\Http\Requests\UnsubscribeRequest;
 use App\Services\SubscriptionService;
 use App\Events\SubscriptionCreated;
 
@@ -43,7 +44,7 @@ class SubscriptionController extends Controller
 
         event(new SubscriptionCreated($result['data']));
 
-        return response()->json(['message' => 'Subscription successful. Confirmation email sent']);
+        return response()->json(['message' => 'Subscription successful. Confirmation email sent.']);
     }
 
     /**
@@ -66,12 +67,14 @@ class SubscriptionController extends Controller
     /**
      * Unsubscribes a user using a token
      *
-     * @param string $token The token associated with the subscription
+     * @param UnsubscribeRequest $request Validated request containing a token
      * @return JsonResponse JSON response indicating success or failure
      */
-    public function unsubscribe(string $token): JsonResponse
+    public function unsubscribe(UnsubscribeRequest $request): JsonResponse
     {
-        $result = $this->subscriptionService->unsubscribe($token);
+        $data = $request->validated();
+
+        $result = $this->subscriptionService->unsubscribe($data['token']);
 
         return $result['status']
             ? response()->json(['message' => $result['message']])

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\WeatherResource;
 use Illuminate\Http\JsonResponse;
 
 use App\Services\WeatherService;
 use App\Http\Requests\GetWeatherRequest;
+use App\Http\Resources\WeatherResource;
 
 /**
  * WeatherController class
