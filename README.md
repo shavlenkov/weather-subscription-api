@@ -1,61 +1,92 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# weather-subscription-api
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Case task for **Software Engineering School 5.0 | KMA**
 
-## About Laravel
+### About project
+API service that allows you to subscribe to regular updates of the weather forecast in the selected location
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Endpoints
+- `GET /api/weather?city={city}` - Get current weather for a given city with `Temperature`, `Humidity` and `Weather description`
+- `POST /api/subscribe` - Subscribe a given `email` to weather updates for a given `city` with a given frequency (`daily` or `hourly`)
+- `GET /api/confirm/{token}` - Confirm email subscription (send a link to this endpoint on the confirmation email)
+- `GET /api/unsubscribe/{token}` - Unsubscribe from weather updates (send a link to this endpoint in each weather update)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Requirements to run the application
+1. PHP >= **8.3.10**
+2. Laravel >= **12**
+3. Composer >= **2.7.1**
+4. Docker >= **26.0.0**
+5. Docker Compose >= **1.29.2**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### How to run the application?
+1. Clone the repository:
 
-## Learning Laravel
+   `git clone https://github.com/shavlenkov/weather-subscription-api.git`
+2. Navigate to the weather-subscription-api folder:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+   `cd weather-subscription-api/`
+3. Create an .env file from the .env.example file:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+   `cp .env.example .env`
+4. Update the following lines in the .env file:
+   ```
+   DB_CONNECTION=pgsql
+   DB_HOST=postgres
+   DB_PORT=5432
+   DB_DATABASE=
+   DB_USERNAME=
+   DB_PASSWORD=
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+   ```
+   WEATHER_API_KEY=
+   ```
+5. Install all dependencies using Composer:
 
-## Laravel Sponsors
+   `composer install`
+6. Run containers using Docker Compose:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+   `docker-compose up -d`
+7. Connect to the container:
 
-### Premium Partners
+   `docker exec -it app bash`
+    1. Assign the correct permissions:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+       `chmod -R 777 .`
+    2. Generate App Key:
 
-## Contributing
+       `php artisan key:generate`
+    3. Run migrations and seeders:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+       `php artisan migrate --seed`
+    4. Run scheduler:
 
-## Code of Conduct
+       On your container, make sure the cron service is running:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+       `systemctl start cron`
 
-## Security Vulnerabilities
+       Open the crontab editor:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+       `crontab -e`
 
-## License
+       Add the following line to run scheduler every minute:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+       `* * * * * /usr/local/bin/php /var/www/artisan schedule:run >> /dev/null 2>&1`
+    5. Run Laravel Queue Worker:
+
+       `php artisan queue:work`
+8. The API will be available at:
+   [http://localhost](http://localhost "http://localhost")
+
+### Deploy
+1. Backend API (Swagger Documentation):
+
+   http://35.194.24.127/api/documentation
+
+2. Frontend (Client Interface):
+
+   http://35.194.24.127:8080/index.html
+
+3. Mailhog (Mail Testing Tool):
+
+   http://35.194.24.127:8025
