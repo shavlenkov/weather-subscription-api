@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Mail;
 
 use App\Events\SubscriptionCreated;
 use App\Mail\ConfirmSubscriptionMail;
+use App\Services\WeatherService;
 
 class SendMailSubscriptionCreatedListener
 {
@@ -14,8 +15,14 @@ class SendMailSubscriptionCreatedListener
      */
     public function handle(SubscriptionCreated $event): void
     {
-        Mail::to($event->subscription->email)->send(
-            new ConfirmSubscriptionMail($event->subscription)
-        );
+        $weatherService = app(WeatherService::class);
+
+        $response = $weatherService->getWeatherByCity($event->subscription->city);
+
+        if ($response) {
+            Mail::to($event->subscription->email)->send(
+                new ConfirmSubscriptionMail($event->subscription)
+            );
+        }
     }
 }
