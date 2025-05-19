@@ -11,7 +11,7 @@ class ConfirmSubscriptionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'token' => 'required|string|max:32',
+            'token' => 'required|string|size:32',
         ];
     }
 
@@ -25,7 +25,7 @@ class ConfirmSubscriptionRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-            'errors' => $validator->errors(),
+            'error' => 'Invalid token',
         ], 400));
     }
 }
