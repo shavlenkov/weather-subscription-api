@@ -5,7 +5,8 @@
         margin: 0;
         padding: 0;
     }
-    .email-container {
+
+    .email {
         max-width: 600px;
         margin: 30px auto;
         background-color: #ffffff;
@@ -13,19 +14,28 @@
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     }
-    .email-header {
+
+    .email__header {
         font-size: 24px;
         font-weight: bold;
         color: #333333;
         margin-bottom: 20px;
     }
-    .email-body {
+
+    .email__body {
         font-size: 16px;
         color: #555555;
         line-height: 1.6;
         margin-bottom: 30px;
     }
-    .button {
+
+    .email__footer {
+        margin-top: 40px;
+        font-size: 14px;
+        color: #999999;
+    }
+
+    .confirm-btn {
         display: inline-block;
         background-color: #1d72b8;
         color: #ffffff;
@@ -34,29 +44,25 @@
         text-decoration: none;
         font-weight: bold;
     }
-    .email-footer {
-        margin-top: 40px;
-        font-size: 14px;
-        color: #999999;
-    }
 </style>
 <body>
-<div class="email-container">
-    <div class="email-header">Confirm Your Subscription</div>
-    <div class="email-body">
-        <p>Hi there!</p>
-        <p>Thank you for subscribing to our newsletter. We're excited to have you on board.</p>
-        <p>To start receiving updates from us, please confirm your subscription by clicking the button below:</p>
-        <p>
-            <a href="{{ route('confirm', ['token' => $subscription->token]) }}" class="button">
-                Confirm Subscription
-            </a>
-        </p>
-        <p>If you did not subscribe, please ignore this email.</p>
+    <div class="email">
+        <div class="email__header">Confirm Your Subscription</div>
+        <div class="email__body">
+            <p>Hi there!</p>
+            <p>Thank you for subscribing to our weather newsletter for <strong>{{ $subscription->city }}</strong>.
+                We're excited to have you on board.</p>
+            <p>To start receiving updates from us, please confirm your subscription by clicking the button below:</p>
+            <p>
+                <a href="{{ route('confirm', ['token' => $subscription->token]) }}" class="confirm-btn">
+                    Confirm Subscription
+                </a>
+            </p>
+            <p>If you did not subscribe, please ignore this email.</p>
+        </div>
+        <div class="email__footer">
+            Thanks,<br />
+            {{ config('app.name') }}
+        </div>
     </div>
-    <div class="email-footer">
-        Thanks,<br />
-        {{ config('app.name') }}
-    </div>
-</div>
 </body>
