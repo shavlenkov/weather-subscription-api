@@ -29,6 +29,36 @@ class WeatherController extends Controller
      *
      * @param GetWeatherRequest $request Validated request containing the city name
      * @return WeatherResource|JsonResponse JSON response with temperature, humidity, and description or a 404 error if city not found
+     *
+     * @OA\Get(
+     *     path="/api/weather",
+     *     tags={"Weather"},
+     *     summary="Get current weather for a city",
+     *     @OA\Parameter(
+     *         name="city",
+     *         in="query",
+     *         required=true,
+     *         description="City name",
+     *         @OA\Schema(type="string", example="Kyiv")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation - current weather forecast returned",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="temperature", type="number", format="float", example=24.5),
+     *             @OA\Property(property="humidity", type="integer", example=80),
+     *             @OA\Property(property="description", type="string", example="Partly cloudy")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid request"
+     *     ),
+     *     @OA\Response(
+     *          response=404,
+     *          description="City not found"
+     *      ),
+     * )
      */
     public function getWeatherByCity(GetWeatherRequest $request): WeatherResource|JsonResponse
     {

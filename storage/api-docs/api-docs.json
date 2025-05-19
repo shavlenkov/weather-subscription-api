@@ -1,0 +1,193 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Weather Subscription API",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/subscribe": {
+            "post": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Subscribe to weather updates",
+                "description": "Handles the subscription request",
+                "operationId": "2730a10456272c98d9f63b38dc37638c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "city",
+                                    "frequency"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "Kyiv"
+                                    },
+                                    "frequency": {
+                                        "type": "string",
+                                        "enum": [
+                                            "daily",
+                                            "hourly"
+                                        ],
+                                        "example": "hourly"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Subscription successful. Confirmation email sent."
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "409": {
+                        "description": "Email already subscribed"
+                    }
+                }
+            }
+        },
+        "/api/confirm/{token}": {
+            "get": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Confirm a subscription",
+                "description": "Confirms a subscription using a token",
+                "operationId": "e5070aec3e2a7bf2d0b10b8d854a538d",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "description": "The token associated with the subscription",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Subscription confirmed successfully"
+                    },
+                    "400": {
+                        "description": "Invalid token"
+                    },
+                    "404": {
+                        "description": "Token not found"
+                    }
+                }
+            }
+        },
+        "/api/unsubscribe/{token}": {
+            "get": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Unsubscribe using token",
+                "description": "Unsubscribes a user using a token",
+                "operationId": "fb4aea38243975aed07ceccb3f010a8d",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "description": "The token associated with the subscription",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Unsubscribed successfully"
+                    },
+                    "400": {
+                        "description": "Invalid token"
+                    },
+                    "404": {
+                        "description": "Token not found"
+                    }
+                }
+            }
+        },
+        "/api/weather": {
+            "get": {
+                "tags": [
+                    "Weather"
+                ],
+                "summary": "Get current weather for a city",
+                "description": "Get weather data for the specified city",
+                "operationId": "48b7b69c230112977cb6af0f441e67e8",
+                "parameters": [
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "City name",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "Kyiv"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation - current weather forecast returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "temperature": {
+                                            "type": "number",
+                                            "format": "float",
+                                            "example": 24.5
+                                        },
+                                        "humidity": {
+                                            "type": "integer",
+                                            "example": 80
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Partly cloudy"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request"
+                    },
+                    "404": {
+                        "description": "City not found"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Subscription",
+            "description": "Subscription"
+        },
+        {
+            "name": "Weather",
+            "description": "Weather"
+        }
+    ]
+}

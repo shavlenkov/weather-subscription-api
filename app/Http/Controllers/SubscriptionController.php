@@ -31,6 +31,33 @@ class SubscriptionController extends Controller
      *
      * @param SubscribeRequest $request Validated subscription request containing email, city, and frequency
      * @return JsonResponse JSON response indicating success or failure
+     *
+     * @OA\Post(
+     *     path="/api/subscribe",
+     *     tags={"Subscription"},
+     *     summary="Subscribe to weather updates",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email", "city", "frequency"},
+     *             @OA\Property(property="email", type="string", format="email", example="user@example.com"),
+     *             @OA\Property(property="city", type="string", example="Kyiv"),
+     *             @OA\Property(property="frequency", type="string", enum={"daily", "hourly"}, example="hourly")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Subscription successful. Confirmation email sent."
+     *     ),
+     *     @OA\Response(
+     *          response=400,
+     *          description="Invalid input"
+     *      ),
+     *     @OA\Response(
+     *         response=409,
+     *         description="Email already subscribed"
+     *     )
+     * )
      */
     public function subscribe(SubscribeRequest $request): JsonResponse
     {
@@ -52,6 +79,31 @@ class SubscriptionController extends Controller
      *
      * @param ConfirmSubscriptionRequest $request Validated request containing a token
      * @return JsonResponse JSON response indicating success or failure
+     *
+     * @OA\Get(
+     *     path="/api/confirm/{token}",
+     *     tags={"Subscription"},
+     *     summary="Confirm a subscription",
+     *     @OA\Parameter(
+     *          name="token",
+     *          in="path",
+     *          required=true,
+     *          description="The token associated with the subscription",
+     *          @OA\Schema(type="string")
+     *      ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Subscription confirmed successfully"
+     *     ),
+     *     @OA\Response(
+     *          response=400,
+     *          description="Invalid token"
+     *      ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Token not found"
+     *     )
+     * )
      */
     public function confirm(ConfirmSubscriptionRequest $request): JsonResponse
     {
@@ -69,6 +121,31 @@ class SubscriptionController extends Controller
      *
      * @param UnsubscribeRequest $request Validated request containing a token
      * @return JsonResponse JSON response indicating success or failure
+     *
+     * @OA\Get(
+     *     path="/api/unsubscribe/{token}",
+     *     tags={"Subscription"},
+     *     summary="Unsubscribe using token",
+     *     @OA\Parameter(
+     *         name="token",
+     *         in="path",
+     *         required=true,
+     *         description="The token associated with the subscription",
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Unsubscribed successfully"
+     *     ),
+     *     @OA\Response(
+     *          response=400,
+     *          description="Invalid token"
+     *      ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Token not found"
+     *     )
+     * )
      */
     public function unsubscribe(UnsubscribeRequest $request): JsonResponse
     {
